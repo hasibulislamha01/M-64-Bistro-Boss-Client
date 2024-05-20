@@ -1,0 +1,9 @@
+.featured-container{
+    background-image: url('../../../assets/images/home/featured.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-color: rgba(122, 121, 121, 0.26);
+    background-blend-mode: darken;
+}
