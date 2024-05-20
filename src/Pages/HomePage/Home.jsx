@@ -17,12 +17,14 @@ const Home = () => {
             <DynamicTitle
                 pageName={'Home'}
             ></DynamicTitle>
-            <Slider></Slider>
-            <Category></Category>
-            <BistroBoss></BistroBoss>
-            <PopularMenues></PopularMenues>
-            <CallUs></CallUs>
-            <ChefRecommends></ChefRecommends>
+                <Slider></Slider>
+            <div className="container mx-auto">
+                <Category></Category>
+                <BistroBoss></BistroBoss>
+                <PopularMenues></PopularMenues>
+                <CallUs></CallUs>
+                <ChefRecommends></ChefRecommends>
+            </div>
             <Featured></Featured>
         </div>
     );
