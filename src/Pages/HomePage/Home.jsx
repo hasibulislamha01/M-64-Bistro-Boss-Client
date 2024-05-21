@@ -1,6 +1,4 @@
-// import Slider from "../../Components/Slider";
 
-import { Helmet } from "react-helmet-async";
 import Slider from "../../Components/Slider";
 import BistroBoss from "./BistroBossSection/BistroBoss";
 import CallUs from "./CallUsSection/CallUs";
