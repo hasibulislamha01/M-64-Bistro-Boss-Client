@@ -1,6 +1,28 @@
-import { NavLink } from "react-router-dom";
+import { IoCartOutline } from "react-icons/io5";
+import { useContext } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { AuthContext } from "../../Auth/AuthProvider";
+import toast from "react-hot-toast";
+import useCartData from "../../Hooks/useCartData";
 
 const Navbar = () => {
+
+    const { user, logout } = useContext(AuthContext)
+    console.log(user, user?.photoURL);
+
+    const [cart] = useCartData()
+    console.log(cart)
+
+    const handleLogout = () => {
+        logout()
+            .then(() => {
+                console.log('successfully logged out')
+                toast.success('successfully logged out')
+            }).catch((error) => {
+                console.error(error.message)
+                toast.error(error.message)
+            });
+    }
 
     const navOptions =
         <>
@@ -9,6 +31,12 @@ const Navbar = () => {
             <NavLink to='/dashboard' className={({ isActive }) => isActive ? 'text-[#EEFF25]' : 'text-white'}>Dashboard</NavLink>
             <NavLink to='/menues' className={({ isActive }) => isActive ? 'text-[#EEFF25]' : 'text-white'}>Our Menu</NavLink>
             <NavLink to='/shop' className={({ isActive }) => isActive ? 'text-[#EEFF25]' : 'text-white'}>Our shop</NavLink>
+            <NavLink className={({ isActive }) => isActive ? 'text-[#EEFF25]' : 'text-white'}>
+                <div className="flex items-center relative">
+                    <div className="text-2xl"><IoCartOutline></IoCartOutline></div>
+                    <div className="badge badge-warning badge-sm">{cart?.length}</div>
+                </div>
+            </NavLink>
         </>
 
     return (
@@ -30,9 +58,18 @@ const Navbar = () => {
                         {navOptions}
                     </div>
                 </div>
-                <div className="navbar-end w-[10%]">
+                <div className="navbar-end w-[17%]">
+                    {
+                        user ?
+                            <div className="flex justify-center items-center gap-3">
+                                <a onClick={handleLogout} className="btn btn-sm bg-opacity-50 border-transparent">Sign out</a>
+                                <div className=" rounded-full h-10 w-10"><img className="rounded-full" src={user?.photoURL} alt="" /></div>
+                            </div>
+                            :
+                            <Link to='/login' className="text-white">Login</Link>
+                    }
 
-                    <a className="btn btn-sm bg-opacity-50 border-transparent">Sign out</a>
+
                 </div>
             </div>
         </div>
