@@ -5,17 +5,22 @@ import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-s
 import { AuthContext } from '../../Auth/AuthProvider';
 import { Link } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import { TbBrandGoogle } from 'react-icons/tb';
+import { GoogleAuthProvider } from 'firebase/auth';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 
 const Login = () => {
 
-    const { signInUser } = useContext(AuthContext)
-
+    const { signInUser, signInWithGoogle } = useContext(AuthContext)
+    const axiosSecure = useAxiosSecure()
     const captcharef = useRef()
     const [disabledBtn, setDisabledBtn] = useState(true)
     useEffect(() => {
         loadCaptchaEnginge(6)
     }, [])
+
+
 
     const handleLoginForm = (event) => {
         event.preventDefault()
@@ -36,17 +41,43 @@ const Login = () => {
             })
     }
 
+    const handleGoogleLogin = () => {
+        const googleProvider = new GoogleAuthProvider()
+        signInWithGoogle(googleProvider)
+            .then(async res => {
+                console.log(res.data)
+                const userInfo = {
+                    userName: res?.user?.displayName,
+                    email: res?.user?.email,
+                    photo: res?.user?.photoURL,
+                }
+                userInfo && axiosSecure.post('/users', userInfo)
+                    .then(res => {
+                        console.log(res.data)
+                        res?.data.insertedId && toast.success('Login successfull')
+
+                    }).catch(error => {
+                        console.error(error.message)
+                        toast.error(error.message)
+                    })
+            })
+            .catch(error => {
+                console.error(error.message)
+                toast.error(error.message)
+            })
+    }
+
 
     const handleValidateCaptcha = () => {
-    const value = captcharef.current.value;
-    console.log(value)
+        const value = captcharef.current.value;
+        console.log(value)
 
-    // validation of captcha
-    if (validateCaptcha(value)) {
-        setDisabledBtn(false)
-    } else {
-        setDisabledBtn(true)
-    }
+        // validation of captcha
+        if (validateCaptcha(value)) {
+            setDisabledBtn(false)
+        } else {
+            setDisabledBtn(true)
+        }
     }
 
 
@@ -96,7 +127,7 @@ const Login = () => {
                                     ref={captcharef}
                                     placeholder="Type the text above"
                                     className="input input-bordered rounded-md"
-                                    // required
+                                // required
                                 />
                                 <button onClick={handleValidateCaptcha} className='btn btn-sm bg-[#111827] text-[#BB8506] absolute right-[2%] bottom-[17%]'>verify</button>
                             </div>
@@ -110,7 +141,14 @@ const Login = () => {
                                 <button id='loginButton' type="submit" className="btn btn-primary">Login</button>
                             </div>
                         </form>
-                        <div>
+                        <div className='divider'></div>
+                        <div className='text-center space-y-2'>
+                            <h1>Login With</h1>
+                            <div className='flex justify-center items-center gap-6  '>
+                                <p onClick={handleGoogleLogin} className='cursor-pointer text-3xl'><TbBrandGoogle /></p>
+                            </div>
+                        </div>
+                        <div className='text-center my-10'>
                             <p>Do not have an account ?</p>
                             <Link to='/register'>Sign Up</Link>
                         </div>

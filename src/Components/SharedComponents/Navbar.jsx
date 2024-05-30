@@ -28,14 +28,14 @@ const Navbar = () => {
         <>
             <NavLink to='/' className={({ isActive }) => isActive ? 'text-[#EEFF25]' : 'text-white'}>Home</NavLink>
             <NavLink to='/contactUs' className={({ isActive }) => isActive ? 'text-[#EEFF25]' : 'text-white'}>Contact Us</NavLink>
-            <NavLink to='/dashboard' className={({ isActive }) => isActive ? 'text-[#EEFF25]' : 'text-white'}>Dashboard</NavLink>
+            <NavLink to='/dashboard/user' className={({ isActive }) => isActive ? 'text-[#EEFF25]' : 'text-white'}>Dashboard</NavLink>
             <NavLink to='/menues' className={({ isActive }) => isActive ? 'text-[#EEFF25]' : 'text-white'}>Our Menu</NavLink>
             <NavLink to='/shop' className={({ isActive }) => isActive ? 'text-[#EEFF25]' : 'text-white'}>Our shop</NavLink>
             <NavLink className={({ isActive }) => isActive ? 'text-[#EEFF25]' : 'text-white'}>
-                <div className="flex items-center relative">
+                <NavLink to='/dashboard/carts' className="flex items-center relative">
                     <div className="text-2xl"><IoCartOutline></IoCartOutline></div>
                     <div className="badge badge-warning badge-sm">{cart?.length}</div>
-                </div>
+                </NavLink>
             </NavLink>
         </>
 

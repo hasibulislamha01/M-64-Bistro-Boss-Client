@@ -2,12 +2,13 @@ import { useContext } from 'react';
 import loginImage from '../../assets/images/others/authentication2.png'
 import { AuthContext } from '../../Auth/AuthProvider';
 import toast, { Toaster } from 'react-hot-toast';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 
 
 const Register = () => {
-
-    const {createUser, updateUserProfile} = useContext(AuthContext)
+    const axiosSecure = useAxiosSecure()
+    const { createUser, updateUserProfile } = useContext(AuthContext)
 
     const handleRegister = (event) => {
         event.preventDefault()
@@ -16,19 +17,27 @@ const Register = () => {
         const email = form.email.value;
         const password = form.password.value;
         const photo = form.photo.value;
-        console.log(userName, email, password, photo);
+        const user = {
+            userName, email, photo
+        }
+        console.log(user);
 
         // creating user
         createUser(email, password)
-        .then(result=> {
-            console.log(result.user)
-            updateUserProfile(userName, photo)
-            toast.success('Registration successfull')
-        })
-        .catch(error=>{
-            console.error(error.message)
-            toast.error(error.message)
-        })
+            .then(result => {
+                console.log(result.user)
+                updateUserProfile(userName, photo)
+                axiosSecure.post('/users', user)
+                    .then(res => {
+                        console.log(res.data)
+                        if (res.data.insertedId)
+                            toast.success('Registration successfull')
+                    })
+            })
+            .catch(error => {
+                console.error(error.message)
+                toast.error(error.message)
+            })
     }
     return (
         <div className='pageContainer'>
@@ -89,8 +98,8 @@ const Register = () => {
                                     required
                                 />
                             </div>
-                           
-                            
+
+
                             <div className="form-control mt-6">
 
 
